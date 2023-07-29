@@ -1,0 +1,3 @@
+interface TweetData {
+    content: string,
+}
