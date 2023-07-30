@@ -36,7 +36,7 @@ export class TweetRepository{
             console.log(error);
         }
     }
-    async find(id: Types.ObjectId) {
+    async find(id: string) {
         try {
             const tweet = await Tweet.findById(id).populate({path: 'likes'});
             return tweet;

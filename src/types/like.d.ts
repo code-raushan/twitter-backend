@@ -2,6 +2,6 @@ import { Types } from "mongoose";
 
 interface LikeType{
     onMod: string;
-    mod: Types.ObjectId;
-    user: Types.ObjectId;
+    mod: string;
+    user: string;
 }

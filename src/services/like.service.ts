@@ -1,9 +1,7 @@
 import { Types } from "mongoose";
 import { LikeRepository } from "../repository/like.repository";
 import { TweetRepository } from "../repository/tweet.repository";
-import { TweetData } from "../types/tweet";
-import { Tweet } from "../model/tweet.model";
-import { LikeType } from "../types/like";
+
 
 export class LikeService{
     TweetRepository
@@ -12,37 +10,41 @@ export class LikeService{
         this.LikeRepository = new LikeRepository();
         this.TweetRepository = new TweetRepository();
     };
-    async toggleLike(modelId: Types.ObjectId, modelType: string, userId: Types.ObjectId){
+    async toggleLike(modelId: string, modelType: string, userId: Types.ObjectId){
+        // finding the likes on a tweet or comment
         if(modelType == 'Tweet') {
-            var likeable = await this.TweetRepository.find(modelId);
+            var likedModel = await this.TweetRepository.find(modelId); // finding and populating with likes
         } else if(modelType == 'Comment') {
             // TODO
         } else {
             throw new Error('unknown model type');
         }
+        // checking if like from the current user exist on the model instance or not
         const exists = await this.LikeRepository.findByUserAndMod({
-            user: userId,
+            user: userId as unknown as string,
             onMod: modelType,
-            mod: modelId
+            mod: modelId as string
         });
+        // if exist, we remove the like from that
         if(exists) {
-            await likeable?.updateOne({ $pull: { likes: exists.id } });
+            await likedModel?.updateOne({ $pull: { likes: exists.id } });
             
-            await likeable?.save();
+            await likedModel?.save();
             await exists.deleteOne();
             var isAdded = false;
 
         } else {
+
+            // create new like        
             const newLike = await this.LikeRepository.create({
-                user: userId,
+                user: userId as unknown as string,
                 onMod: modelType,
-                mod: modelId
+                mod: modelId as string
             });
-            likeable?.likes.push(newLike.id);
-            await likeable?.save();
+            likedModel?.likes.push(newLike.id);
+            await likedModel?.save();
             var isAdded = true;
         }
         return isAdded;
-
     }
 }

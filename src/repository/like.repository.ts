@@ -3,9 +3,9 @@ import { Like } from "../model/like.model";
 import { LikeType } from "../types/like";
 
 interface LikedBy{
-    user: Types.ObjectId;
-    onMod: string;
-    mod: Types.ObjectId;
+    user: string; // user
+    onMod: string; // which model
+    mod: string; // model instance id
 }
 
 export class LikeRepository{
