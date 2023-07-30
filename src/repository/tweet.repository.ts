@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import {Types} from "mongoose";
 import { Tweet } from "../model/tweet.model";
+import { TweetData } from "../types/tweet";
 
 
 export class TweetRepository{
@@ -11,7 +12,7 @@ export class TweetRepository{
             console.log(error);
         }
     }
-    async get(id:string) {
+    async get(id:Types.ObjectId) {
         try {
             const tweet = await Tweet.findById(id);
             return tweet;
@@ -19,7 +20,7 @@ export class TweetRepository{
             console.log(error);
         }
     }
-    async destroy(id:string) {
+    async destroy(id:Types.ObjectId) {
         try {
             const tweet = await Tweet.findByIdAndRemove(id);
             return tweet;
@@ -30,6 +31,14 @@ export class TweetRepository{
     async getAll(offset:number, limit:number) {
         try {
             const tweet = await Tweet.find().skip(offset).limit(limit);
+            return tweet;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async find(id: Types.ObjectId) {
+        try {
+            const tweet = await Tweet.findById(id).populate({path: 'likes'});
             return tweet;
         } catch (error) {
             console.log(error);

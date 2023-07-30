@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import {Types} from "mongoose";
 import { Hashtag } from "../model/hashtag.model";
-
+import { HashtagType } from "../types/hashtag";
 
 export class HashtagRepository{
-    async create(data:Hashtag) {
+    async create(data:HashtagType) {
         try {
             const tag = await Hashtag.create(data);
             return tag;
@@ -12,7 +12,7 @@ export class HashtagRepository{
         }
     }
 
-    async bulkCreate(data:Hashtag[]) {
+    async bulkCreate(data:HashtagType[]) {
         try {
             console.log(data);
             const tags = await Hashtag.insertMany(data);
@@ -22,7 +22,7 @@ export class HashtagRepository{
         }
     }
 
-    async get(id:string) {
+    async get(id:Types.ObjectId) {
         try {
             const tag = await Hashtag.findById(id);
             return tag;
@@ -31,7 +31,7 @@ export class HashtagRepository{
         }
     }
 
-    async destroy(id:string) {
+    async destroy(id:Types.ObjectId) {
         try {
             const response = await Hashtag.findByIdAndRemove(id);
             return response;

@@ -1,6 +1,13 @@
 import { TweetRepository } from "../repository/tweet.repository";
 import { HashtagRepository } from "../repository/hashtag.repository";
+import { HashtagType } from "../types/hashtag";
+import { TweetData } from "../types/tweet";
+import { Types } from "mongoose";
 
+interface HType{
+    title: string;
+    tweets: any[];
+}
 
 export class TweetService{
     TweetRepository
@@ -23,12 +30,17 @@ export class TweetService{
 
         let newTags = tags?.filter(tag=> !titleOfPresentTags?.includes(tag)) as string[];
 
-        let newHashtags = newTags?.map(tag=>{
-            return {title: tag, tweets: [tweet?.id]}
-        }) as Hashtag[];
+        // let newHashtags = newTags?.map(tag=>{
+        //     return {title: tag, tweets: [tweet?.id]}
+        // }) as HashtagType[];
+        // if(newHashtags !== undefined) await this.HashtagRepository.bulkCreate(newHashtags);
+        // newTags = newTags?.map(tag=>{
+        //     return {title: tag, tweets: [tweet?.id]}
+        // })
+        if(newTags!==undefined){
+            await this.HashtagRepository.bulkCreate(newTags?.map(tag=>{return {title: tag, tweets: [tweet?.id]}}));
+        }
 
-        if(newTags.length>0) await this.HashtagRepository.bulkCreate(newHashtags);
-        
         alreadyPresentTags?.forEach((tag)=>{
             tag.tweets.push(tweet?.id);
             tag.save();
