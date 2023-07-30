@@ -1,49 +1,74 @@
 import { Types } from "mongoose";
 import { LikeRepository } from "../repository/like.repository";
 import { TweetRepository } from "../repository/tweet.repository";
+import { CommentRepository } from "../repository/comment.repository";
 
 
 export class LikeService{
-    TweetRepository
-    LikeRepository
+    tweetRepository
+    likeRepository
+    commentRepository
     constructor(){
-        this.LikeRepository = new LikeRepository();
-        this.TweetRepository = new TweetRepository();
+        this.likeRepository = new LikeRepository();
+        this.tweetRepository = new TweetRepository();
+        this.commentRepository = new CommentRepository()
     };
-    async toggleLike(modelId: string, modelType: string, userId: Types.ObjectId){
-        // finding the likes on a tweet or comment
-        if(modelType == 'Tweet') {
-            var likedModel = await this.TweetRepository.find(modelId); // finding and populating with likes
-        } else if(modelType == 'Comment') {
-            // TODO
-        } else {
-            throw new Error('unknown model type');
-        }
+    async toggleLike(modelId: string, modelType: 'Tweet' | 'Comment', userId: Types.ObjectId){
+        
         // checking if like from the current user exist on the model instance or not
-        const exists = await this.LikeRepository.findByUserAndMod({
+        const exists = await this.likeRepository.findByUserAndMod({
             user: userId as unknown as string,
             onMod: modelType,
             mod: modelId as string
         });
         // if exist, we remove the like from that
-        if(exists) {
-            await likedModel?.updateOne({ $pull: { likes: exists.id } });
-            
-            await likedModel?.save();
-            await exists.deleteOne();
-            var isAdded = false;
-
+        
+        // finding the likes on a tweet or comment
+        if(modelType == 'Tweet') {
+            let likedModel = await this.tweetRepository.find(modelId); // finding and populating with likes
+            if(exists) {
+                await likedModel?.updateOne({ $pull: { likes: exists.id } });
+                
+                await likedModel?.save();
+                await exists.deleteOne();
+                var isAdded = false;
+    
+            } else {
+    
+                // create new like        
+                const newLike = await this.likeRepository.create({
+                    user: userId as unknown as string,
+                    onMod: modelType,
+                    mod: modelId as string
+                });
+                likedModel?.likes.push(newLike.id);
+                await likedModel?.save();
+                var isAdded = true;
+            }
+        } else if(modelType == 'Comment') {
+            // TODO
+            let likedModel = await this.commentRepository.find(modelId)
+            if(exists) {
+                await likedModel?.updateOne({ $pull: { likes: exists.id } });
+                
+                await likedModel?.save();
+                await exists.deleteOne();
+                var isAdded = false;
+    
+            } else {
+    
+                // create new like        
+                const newLike = await this.likeRepository.create({
+                    user: userId as unknown as string,
+                    onMod: modelType,
+                    mod: modelId as string
+                });
+                likedModel?.likes.push(newLike.id);
+                await likedModel?.save();
+                var isAdded = true;
+            }
         } else {
-
-            // create new like        
-            const newLike = await this.LikeRepository.create({
-                user: userId as unknown as string,
-                onMod: modelType,
-                mod: modelId as string
-            });
-            likedModel?.likes.push(newLike.id);
-            await likedModel?.save();
-            var isAdded = true;
+            throw new Error('unknown model type');
         }
         return isAdded;
     }
