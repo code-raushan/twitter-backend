@@ -5,5 +5,5 @@ interface HashtagType {
     tweets: Tweet[]
 }
 interface Tweet{
-    id: Types.ObjectId;
+    id: string;
 }

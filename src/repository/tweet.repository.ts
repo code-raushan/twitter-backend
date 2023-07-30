@@ -12,7 +12,7 @@ export class TweetRepository{
             console.log(error);
         }
     }
-    async get(id:Types.ObjectId) {
+    async get(id:string) {
         try {
             const tweet = await Tweet.findById(id);
             return tweet;
@@ -20,7 +20,7 @@ export class TweetRepository{
             console.log(error);
         }
     }
-    async destroy(id:Types.ObjectId) {
+    async destroy(id:string) {
         try {
             const tweet = await Tweet.findByIdAndRemove(id);
             return tweet;
@@ -30,8 +30,8 @@ export class TweetRepository{
     }
     async getAll(offset:number, limit:number) {
         try {
-            const tweet = await Tweet.find().skip(offset).limit(limit);
-            return tweet;
+            const tweets = await Tweet.find().skip(offset).limit(limit);
+            return tweets;
         } catch (error) {
             console.log(error);
         }
@@ -44,5 +44,20 @@ export class TweetRepository{
             console.log(error);
         }
     }
+    async getWithComments(id:string){
+        try {
+            const tweet = await Tweet.findById(id).populate({
+                path: 'comments', 
+                populate: {
+                    path: 'comments'
+                }
+            }).lean();
+            return tweet;
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
 
 }

@@ -47,4 +47,8 @@ export class TweetService{
         });
         return tweet;
     }
+    async get(tweetId: string){
+        const tweet = await this.TweetRepository.getWithComments(tweetId);
+        return tweet;
+    }
 }

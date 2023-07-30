@@ -22,7 +22,7 @@ export class HashtagRepository{
         }
     }
 
-    async get(id:Types.ObjectId) {
+    async get(id:string) {
         try {
             const tag = await Hashtag.findById(id);
             return tag;
@@ -31,7 +31,7 @@ export class HashtagRepository{
         }
     }
 
-    async destroy(id:Types.ObjectId) {
+    async destroy(id:string) {
         try {
             const response = await Hashtag.findByIdAndRemove(id);
             return response;

@@ -29,7 +29,7 @@ export class LikeRepository{
             throw error;
         }
     };
-    async destroy(id: Types.ObjectId){
+    async destroy(id: string){
         try {
             const result = await Like.findByIdAndDelete(id);
             return result;
@@ -38,7 +38,7 @@ export class LikeRepository{
             throw error;
         }
     };
-    async get(id: Types.ObjectId){
+    async get(id: string){
         try {
             const result = await Like.findById(id);
             return result;
