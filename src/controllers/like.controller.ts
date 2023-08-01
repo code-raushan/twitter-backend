@@ -5,7 +5,9 @@ const likeService = new LikeService();
 
 export const toggleLike = async (req:Request, res: Response)=>{
     try {
+        console.log(req.user);
         const response = await likeService.toggleLike(req.query.modelId as string, req.query.modelType as 'Tweet' | 'Comment', req.body.userId);
+
         return res.status(200).json({
             success: true,
             data: response,

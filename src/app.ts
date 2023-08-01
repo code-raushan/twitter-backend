@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(passport.initialize());
-passportAuth(passport)
+passportAuth(passport);
 
 app.use('/api', routes)
 

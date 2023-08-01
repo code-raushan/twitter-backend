@@ -45,7 +45,7 @@ userSchema.methods = {
   getJWT: function () {
     const token = jwt.sign(
       { id: this._id, email: this.email },
-      'twitter_backend',
+      'twitter_secret',
       {
         expiresIn: "3h",
       }

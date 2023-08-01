@@ -11,10 +11,12 @@ const opts = {
     secretOrKey: "twitter_secret"
 };
 
-export const passportAuth = (passport: typeof passportType)=>{
+export const passportAuth = (passport: any)=>{
     try {
         passport.use(new JwtStartegy(opts, async(jwt_payload, done)=>{
+            console.log('inside jwt-middleware');
             const user = await User.findById(jwt_payload.id);
+            console.log('user', user);
             if(!user){
                 done(null, false)
             }else{

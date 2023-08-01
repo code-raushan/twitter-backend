@@ -36,9 +36,7 @@ export class UserService{
                     message: 'incorrect password'
                 }
             }
-            console.log(user);
             const token = user.getJWT();
-            console.log(token);
             return token;
         } catch (error) {
             
