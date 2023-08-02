@@ -1,7 +1,7 @@
 import { CommentRepository } from "../repository/comment.repository";
 import { TweetRepository } from "../repository/tweet.repository";
 import { TweetData } from "../types/tweet";
-
+import { Types } from "mongoose";
 export class CommentService {
   tweetRepository;
   commentRepository;

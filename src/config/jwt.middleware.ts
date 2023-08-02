@@ -11,7 +11,7 @@ const opts = {
     secretOrKey: "twitter_secret"
 };
 
-export const passportAuth = (passport: any)=>{
+export const passportAuth = (passport: typeof passportType)=>{
     try {
         passport.use(new JwtStartegy(opts, async(jwt_payload, done)=>{
             console.log('inside jwt-middleware');
