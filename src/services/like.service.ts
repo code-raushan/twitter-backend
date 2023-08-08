@@ -41,7 +41,7 @@ export class LikeService{
                     onMod: modelType,
                     mod: modelId as string
                 });
-                likedModel?.likes.push(newLike.id);
+                likedModel?.likes!.push(newLike.id);
                 await likedModel?.save();
                 var isAdded = true;
             }

@@ -1,4 +1,11 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
+
+interface ITweet extends Document{
+    content: string;
+    likes?: Types.ObjectId[];
+    comments?: Types.ObjectId[];
+    image?: string;
+}
 
 const tweetSchema = new mongoose.Schema({
     content: {
@@ -17,11 +24,14 @@ const tweetSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Comment'
         }
-    ]
+    ],
+    image: {
+        type: String,
+    }
 },
 {
     timestamps: true
 }
 );
 
-export const Tweet = mongoose.model('Tweet', tweetSchema)
+export const Tweet = mongoose.model<ITweet>('Tweet', tweetSchema)

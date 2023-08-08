@@ -3,4 +3,5 @@ interface TweetData {
     content: string;
     likes?: string[];
     comments?: string[];
+    image?: string;
 }

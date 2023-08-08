@@ -26,7 +26,7 @@ export class CommentService {
     
     if(modelType==='Tweet'){
         let commentedMod = await this.tweetRepository.get(modelId);
-        commentedMod?.comments.push(comment?.id);
+        commentedMod?.comments!.push(comment?.id);
         await commentedMod?.save();
     }else if(modelType==='Comment'){
         let commentedMod = await this.commentRepository.get(modelId);
@@ -36,6 +36,5 @@ export class CommentService {
         throw new Error('Unknown Model Type');
     };
     return comment;
-
   }
 }

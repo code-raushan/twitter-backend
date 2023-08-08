@@ -1,7 +1,14 @@
 import { User } from "../model/user.model";
+import { UserType } from "../types/user";
+interface SignUp{
+    email: string;
+    name: string;
+    password: string;
+
+}
 
 export class UserRepository{
-    async create(data: UserType){
+    async create(data: SignUp){
         try {
             const user = await User.create(data);
             return user;
